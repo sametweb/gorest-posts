@@ -59,7 +59,11 @@ function PostsTable() {
         const { user_id, title, body } = record;
         return (
           <>
-            <a
+            <Button
+              size="small"
+              type="primary"
+              ghost
+              style={{ marginRight: 5 }}
               onClick={() => {
                 showModal("edit");
                 setPostForm({ user_id, title, body });
@@ -67,16 +71,18 @@ function PostsTable() {
               }}
             >
               Edit
-            </a>{" "}
-            |{" "}
-            <a
+            </Button>
+            <Button
+              size="small"
+              danger
+              ghost
               onClick={() => {
                 showModal("delete");
                 setSelectedRecord(record.id);
               }}
             >
               Delete
-            </a>
+            </Button>
           </>
         );
       },
@@ -98,6 +104,7 @@ function PostsTable() {
       dispatch(deletePost(selectedRecord));
     }
     setDialogMode(null);
+    setPostForm(emptyPost);
   };
 
   const handleCancel = () => {
@@ -106,10 +113,8 @@ function PostsTable() {
     setSelectedRecord(0);
   };
 
-  const emptyPost = { title: "", body: "", user_id: 1871 };
+  const emptyPost = { title: "", body: "", user_id: 771 };
   const [postForm, setPostForm] = useState<PostForm>(emptyPost);
-
-  console.log({ postForm });
 
   return (
     <React.Fragment>
@@ -123,15 +128,30 @@ function PostsTable() {
         rowKey="id"
       />
       <Modal
-        title="Basic Modal"
+        title={
+          dialogMode === "add"
+            ? "Add"
+            : dialogMode === "edit"
+            ? "Edit"
+            : dialogMode === "delete"
+            ? "Delete"
+            : ""
+        }
         visible={Boolean(dialogMode)}
         onOk={handleOk}
         onCancel={handleCancel}
       >
         {dialogMode === "add" || dialogMode === "edit" ? (
           <>
-            <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: 10,
+              }}
+            >
               <Input
+                style={{ borderColor: "#ccc" }}
                 placeholder="Title"
                 value={postForm?.title}
                 onChange={(e) =>
@@ -139,8 +159,15 @@ function PostsTable() {
                 }
               />
             </div>
-            <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: 10,
+              }}
+            >
               <TextArea
+                style={{ borderColor: "#ccc" }}
                 rows={4}
                 placeholder="Post Body"
                 value={postForm?.body}

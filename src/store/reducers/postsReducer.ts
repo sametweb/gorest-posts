@@ -17,6 +17,7 @@ const postsReducer = (state: PostState = initialState, action: PostAction) => {
     case "ADD_POST_START":
       return { ...state, loading: true, error: "" };
     case "ADD_POST_SUCCESS":
+      console.log(action.payload);
       return {
         ...state,
         loading: false,
